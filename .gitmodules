@@ -1,0 +1,3 @@
+[submodule "XTEngine2d/vendor/spdlog"]
+	path = XTEngine2d/vendor/spdlog
+	url = https://github.com/gabime/spdlog

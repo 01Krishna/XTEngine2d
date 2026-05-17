@@ -7,7 +7,11 @@ extern XTEngine2d::Application* XTEngine2d::CreateApplication();
 
 int main()
 {	
+	XTEngine2d::Log::Init();
+
+
 	auto app = XTEngine2d::CreateApplication();
+	app->Init();	
 	app->Run(); 
 	delete app;
 }	

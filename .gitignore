@@ -1,8 +1,17 @@
 .vs/
 bin/
 bin-int/
+Assets/textures
+Assets/editor
+Assets/fonts
+Assets/audio
+
 
 
 #files
 
+.vs/
 *.user
+*.obj
+*.pdb
+*.ilk
