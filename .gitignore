@@ -16,3 +16,4 @@ Assets/prefabs
 *.obj
 *.pdb
 *.ilk
+/XTEngine2d/vendor/glfw
