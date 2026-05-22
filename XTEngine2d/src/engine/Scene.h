@@ -5,6 +5,7 @@
 #include "Systems/MovementSystem.h"
 #include "Systems//RenderSystem.h"
 #include "Camera.h"
+#include "Hierarchy.h"
 
 namespace XTEngine2d
 {
@@ -33,6 +34,10 @@ namespace XTEngine2d
 		Entity GetPrimaryCamera();
 
 		void Clear();
+
+		void UpdateHierarchityTransfrom();
+
+		void UpdateChildTransform(Entity entity);
 
 		Scene(const Scene&) = delete;
 		Scene& operator=(const Scene&) = delete;

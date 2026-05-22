@@ -6,17 +6,13 @@ json ComponentSerializer::SerializeTransform(const XTEngine2d::Transform& transf
 {
 	json entityJson;
 
-	entityJson["x"] = transform.position.x;
-	entityJson["y"] = transform.position.y;
+	entityJson["x"] = transform.localPosition.x;
+	entityJson["y"] = transform.localPosition.y;
 
 	entityJson["width"] = transform.size.x;
 	entityJson["height"] = transform.size.y;
 
-	entityJson["rotationX"] = transform.rotation.x;
-	entityJson["rotationY"] = transform.rotation.y;
-	entityJson["rotationZ"] = transform.rotation.z;
-
-
+	entityJson["rotation"] = transform.localRotation;
 
 	return entityJson;
 }
@@ -25,13 +21,11 @@ XTEngine2d::Transform ComponentSerializer::DeserializeTransform(const json& tran
 {
 	XTEngine2d::Transform transform;
 
-	transform.position.x = transformJson["x"];
-	transform.position.y = transformJson["y"];
+	transform.localPosition.x = transformJson["x"];
+	transform.localPosition.y = transformJson["y"];
 	transform.size.x = transformJson["width"];
 	transform.size.y = transformJson["height"];
-	transform.rotation.x = transformJson["rotationX"];
-	transform.rotation.y = transformJson["rotationY"];
-	transform.rotation.z = transformJson["rotationZ"];
+	transform.localRotation = transformJson["rotation"];
 
 	return transform;
 }
@@ -91,6 +85,8 @@ json ComponentSerializer::SerializePlayerController(const XTEngine2d::PlayerCont
 {
 	json entityJson;
 
+	entityJson["Player"] = playerController.player;
+
 	entityJson["VelocityX"] = playerController.vel.velocity.x;
 	entityJson["VelocityY"] = playerController.vel.velocity.y;
 
@@ -100,6 +96,8 @@ json ComponentSerializer::SerializePlayerController(const XTEngine2d::PlayerCont
 XTEngine2d::PlayerController ComponentSerializer::DeSerializePlayerController(const json& playercontrollerJson)
 {
 	XTEngine2d::PlayerController player;
+
+	player.player = playercontrollerJson["Player"];
 
 	player.vel.velocity.x = playercontrollerJson["VelocityX"];
 	player.vel.velocity.y = playercontrollerJson["VelocityY"];

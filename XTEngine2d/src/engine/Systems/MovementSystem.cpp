@@ -50,8 +50,8 @@ namespace XTEngine2d
 						cameracontrol.vel.velocity.y = 0;
 					}
 
-					camtransform.position.x += cameracontrol.vel.velocity.x * deltaTime;
-					camtransform.position.y += cameracontrol.vel.velocity.y * deltaTime;
+					camtransform.localPosition.x += cameracontrol.vel.velocity.x * deltaTime;
+					camtransform.localPosition.y += cameracontrol.vel.velocity.y * deltaTime;
 				}
 			}
 			else
@@ -68,43 +68,43 @@ namespace XTEngine2d
 				auto& transform = scene.m_Registry.GetComponent<XTEngine2d::Transform>(entity);
 				auto& playercontrol = scene.m_Registry.GetComponent<XTEngine2d::PlayerController>(entity);
 
+				if (playercontrol.player)
+				{
 
-				if (Input.IsKeyPressed(GLFW_KEY_A))
-				{
-					playercontrol.vel.velocity.x -= 0.5;
-				}
-				else if (Input.IsKeyPressed(GLFW_KEY_W))
-				{
-					playercontrol.vel.velocity.y -= 0.5;
-				}
-				else if (Input.IsKeyPressed(GLFW_KEY_D))
-				{
-					playercontrol.vel.velocity.x += 0.5;
-				}
-				else if (Input.IsKeyPressed(GLFW_KEY_S))
-				{
-					playercontrol.vel.velocity.y += 0.5;
-				}
-				else
-				{
-					if (playercontrol.vel.velocity.x > 0)
+					if (Input.IsKeyPressed(GLFW_KEY_A))
+					{
 						playercontrol.vel.velocity.x -= 0.5;
-
-					else if(playercontrol.vel.velocity.x < 0)
-						playercontrol.vel.velocity.x += 0.5;
-					
-					if (playercontrol.vel.velocity.y > 0)
+					}
+					else if (Input.IsKeyPressed(GLFW_KEY_W))
+					{
 						playercontrol.vel.velocity.y -= 0.5;
-					else if(playercontrol.vel.velocity.y < 0)
+					}
+					else if (Input.IsKeyPressed(GLFW_KEY_D))
+					{
+						playercontrol.vel.velocity.x += 0.5;
+					}
+					else if (Input.IsKeyPressed(GLFW_KEY_S))
+					{
 						playercontrol.vel.velocity.y += 0.5;
+					}
+					else
+					{
+						if (playercontrol.vel.velocity.x > 0)
+							playercontrol.vel.velocity.x -= 0.5;
 
-					//playercontrol.vel.velocity.x = 0;
-					//playercontrol.vel.velocity.y = 0;
+						else if (playercontrol.vel.velocity.x < 0)
+							playercontrol.vel.velocity.x += 0.5;
+
+						if (playercontrol.vel.velocity.y > 0)
+							playercontrol.vel.velocity.y -= 0.5;
+						else if (playercontrol.vel.velocity.y < 0)
+							playercontrol.vel.velocity.y += 0.5;
+					}
+
+				transform.localPosition.x += playercontrol.vel.velocity.x * deltaTime;
+				transform.localPosition.y += playercontrol.vel.velocity.y * deltaTime;
+
 				}
-
-				transform.position.x += playercontrol.vel.velocity.x * deltaTime;
-				transform.position.y += playercontrol.vel.velocity.y * deltaTime;
-
 			}	
 			else
 			{

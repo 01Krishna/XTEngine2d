@@ -63,8 +63,8 @@ void ScenePanel::CreateDefaultCamera(XTEngine2d::Scene* scene)
 	cam.zoom = 1.0f;
 	scene->m_Registry.AddComponent<XTEngine2d::Camera>(cameraEntity, cam);
 	XTEngine2d::Transform transform;
-	transform.position = { 0.0f, 0.0f };
-	transform.rotation = { 0.0f, 0.0f, 0.0f };
+	transform.localPosition = { 0.0f, 0.0f };
+	transform.localRotation = 0.f;
 	transform.size = { 1.0f, 1.0f };
 	scene->m_Registry.AddComponent<XTEngine2d::Transform>(cameraEntity, transform);
 }

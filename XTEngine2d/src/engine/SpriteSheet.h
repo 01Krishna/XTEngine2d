@@ -14,7 +14,7 @@ namespace XTEngine2d
     public:
         int m_Columns = 0;
         int m_Rows = 0;
-    private:
+
 		int m_SelectedColumn = 0;
 		int m_SelectedRow = 0;
 
@@ -39,6 +39,14 @@ namespace XTEngine2d
             m_Rows = texture->GetHeight() / spriteHeight;
         }
 
+        void SetSpriteDimension(int spriteWidth, int spriteHeight)
+        {
+            m_SpriteWidth = spriteWidth;
+            m_SpriteHeight = spriteHeight;
+            m_Columns = m_Texture->GetWidth() / spriteWidth;
+            m_Rows = m_Texture->GetHeight() / spriteHeight;
+        }
+
         glm::vec4 GetUV(int column, int row)
         {
 			m_SelectedColumn = column;
@@ -48,7 +56,7 @@ namespace XTEngine2d
             float texHeight = (float)m_Texture->GetHeight();
 
             float x = column * m_SpriteWidth;
-            float y = (m_Rows - 1 - row) * m_SpriteHeight;
+            float y = row * m_SpriteHeight;
 
             float u1 = x / texWidth;
             float v1 = y / texHeight;

@@ -15,14 +15,21 @@ namespace XTEngine2d
 {
 	struct Transform
 	{
-		Transform(glm::vec2 Pos, glm::vec2 Size, glm::vec3 Rotation)
-			:position(Pos),size(Size),rotation(Rotation)
+		Transform(glm::vec2 Pos, glm::vec2 Size, float Rotation)
+			:localPosition(Pos),size(Size),localRotation(Rotation)
 		{ }
 		Transform() = default;
 
-		glm::vec2 position = { 10,10 };
+		glm::vec2 localPosition = { 10,10 };
+		glm::vec2 localScale = { 1,1 };
+		float localRotation = 0.f;
+
+
+		glm::vec2 worldPosition = { 0,0 };
+		glm::vec2 worldScale = { 1,1 };
+		float worldRotation = 0.f;
+
 		glm::vec2 size = { 100,100 };
-		glm::vec3 rotation{ 0,0,0 };
 	};
 
 

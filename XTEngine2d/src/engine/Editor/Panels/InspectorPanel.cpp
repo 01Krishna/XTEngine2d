@@ -17,22 +17,34 @@ void InspectorPanel::OnImGuiRender(Scene* scene, Entity &m_SelectedEntity, std::
 		{
 			auto& transform = scene->m_Registry.GetComponent<Transform>(m_SelectedEntity);
 			ImGui::Text("Transform");
-			ImGui::DragFloat2("Position", &transform.position.x);
+			ImGui::DragFloat2("Position", &transform.localPosition.x);
 			ImGui::DragFloat2("Size", &transform.size.x);
-			ImGui::DragFloat3("Rotation", &transform.rotation.x);
+			ImGui::DragFloat("Rotation", &transform.localRotation);
+			ImGui::DragFloat2("Scale", &transform.localScale.x);
 		}
 
 		if (scene->m_Registry.HasComponent<Sprite>(m_SelectedEntity))
 		{
 			auto& sprite = scene->m_Registry.GetComponent<Sprite>(m_SelectedEntity);
-			if(scene->m_Registry.HasComponent<SpriteSheet>(m_SelectedEntity))
-				auto& sheet = scene->m_Registry.GetComponent<SpriteSheet>(m_SelectedEntity);
-			
-			ImGui::Text("Sprite");
+			auto& sheet = scene->m_Registry.GetComponent<SpriteSheet>(m_SelectedEntity);
 
-		
-			ImGui::DragInt("Row", &row);
-			ImGui::DragInt("Column", &column);
+
+			ImGui::Text("Sprite");
+			ImGui::DragInt("Sprite Width", &sheet.m_SpriteWidth);
+			ImGui::DragInt("Sprite Height", &sheet.m_SpriteHeight);
+
+			sheet.SetSpriteDimension(sheet.m_SpriteWidth, sheet.m_SpriteHeight);
+
+			ImGui::DragInt("Row", &sheet.m_SelectedRow);
+			ImGui::DragInt("Columns", &sheet.m_SelectedColumn);
+
+			sprite.uv = sheet.GetUV(sheet.m_SelectedColumn, sheet.m_SelectedRow);
+		}
+
+		if (scene->m_Registry.HasComponent<PlayerController>(m_SelectedEntity))
+		{
+			auto& player = scene->m_Registry.GetComponent<PlayerController>(m_SelectedEntity);
+			ImGui::Checkbox("Player", &player.player);
 		}
 
 
@@ -97,6 +109,36 @@ void InspectorPanel::OnImGuiRender(Scene* scene, Entity &m_SelectedEntity, std::
 				}
 			}
 
+			if (ImGui::MenuItem("Create Child"))
+			{
+				Entity parent = m_SelectedEntity;
+
+				Entity child = scene->m_Registry.CreateEntity();
+
+				Tag tag;
+				tag.name = "Child";
+
+				Transform transform;
+
+				Hierarchy childHierarchy;
+				childHierarchy.parent = parent;
+
+				scene->m_Registry.AddComponent(child, tag);
+				scene->m_Registry.AddComponent(child, transform);
+				scene->m_Registry.AddComponent(child, childHierarchy);
+
+				// Parent needs hierarchy too
+				if (!scene->m_Registry.HasComponent<Hierarchy>(parent))
+				{
+					scene->m_Registry.AddComponent(parent, Hierarchy{});
+				}
+
+				scene->m_Registry
+					.GetComponent<Hierarchy>(parent)
+					.children
+					.push_back(child);
+			}
+
 			ImGui::EndPopup();
 		}
 
@@ -154,7 +196,7 @@ void InspectorPanel::OnImGuiRender(Scene* scene, Entity &m_SelectedEntity, std::
 			static char buffer[256];
 
 			strcpy_s(buffer, tag.name.c_str());
-			
+
 			if (ImGui::InputText(
 				"##Tag",
 				buffer,
@@ -171,6 +213,19 @@ void InspectorPanel::OnImGuiRender(Scene* scene, Entity &m_SelectedEntity, std::
 				auto& primecam = scene->m_Registry.GetComponent<Camera>(m_SelectedEntity);
 				if (ImGui::Checkbox("Primary Camera", &primecam.primary));
 				ImGui::DragFloat("Zoom", &primecam.zoom);
+			}
+		}
+
+		if (ImGui::Button("Save Prefab"))
+		{
+			if (m_SelectedEntity)
+			{
+				if (scene->m_Registry.HasComponent<Tag>(m_SelectedEntity))
+				{
+					Tag tag = scene->m_Registry.GetComponent<Tag>(m_SelectedEntity);
+					PrefabSerializer serializer;
+					serializer.SerializeEntity(m_SelectedEntity, scene, "Assets//prefabs//" + tag.name + ".prefab");
+				}
 			}
 		}
 	}

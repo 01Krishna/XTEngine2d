@@ -133,6 +133,14 @@ void ViewportPanel::OnImGuiRender(std::shared_ptr<Scene> EditorScene, std::share
 				if(sceneState == SceneState::Edit)
 					LoadSceneFromDrop(EditorScene.get(), std::string(path));
 			}
+			else if (extension == ".prefab")
+			{
+				if (sceneState == SceneState::Edit)
+				{
+					PrefabSerializer serializer;
+					m_SelectedEntity = serializer.DeserializeEntity(EditorScene.get(), std::string(path));
+				}
+			}
 		}
 
 		ImGui::EndDragDropTarget();
@@ -230,14 +238,14 @@ void ViewportPanel::DrawOutline(Scene* scene, Renderer& renderer, glm::mat4 view
 
 
 			Transform outlineTransform;
-			outlineTransform.position = transform.position - glm::vec2(2, 2);
+			outlineTransform.worldPosition = transform.worldPosition - glm::vec2(2, 2);
 			outlineTransform.size = transform.size + glm::vec2(4, 4);
-			outlineTransform.rotation = transform.rotation;
+			outlineTransform.localRotation = transform.localRotation;
 			glLineWidth(3.0f);
-			m_LineRenderer.DrawLine(outlineTransform.position, { outlineTransform.position.x + outlineTransform.size.x, outlineTransform.position.y }, { 1,1,1,1 }, viewProjection);
-			m_LineRenderer.DrawLine({ outlineTransform.position.x + outlineTransform.size.x, outlineTransform.position.y }, { outlineTransform.position.x + outlineTransform.size.x, outlineTransform.position.y + outlineTransform.size.y }, { 1,1,1,1 }, viewProjection);
-			m_LineRenderer.DrawLine(outlineTransform.position, { outlineTransform.position.x, outlineTransform.position.y + outlineTransform.size.y }, { 1,1,1,1 }, viewProjection);
-			m_LineRenderer.DrawLine({ outlineTransform.position.x, outlineTransform.position.y + outlineTransform.size.y }, { outlineTransform.position.x + outlineTransform.size.x, outlineTransform.position.y + outlineTransform.size.y }, { 1,1,1,1 }, viewProjection);
+			m_LineRenderer.DrawLine(outlineTransform.worldPosition, { outlineTransform.worldPosition.x + outlineTransform.size.x, outlineTransform.worldPosition.y }, { 1,1,1,1 }, viewProjection);
+			m_LineRenderer.DrawLine({ outlineTransform.worldPosition.x + outlineTransform.size.x, outlineTransform.worldPosition.y }, { outlineTransform.worldPosition.x + outlineTransform.size.x, outlineTransform.worldPosition.y + outlineTransform.size.y }, { 1,1,1,1 }, viewProjection);
+			m_LineRenderer.DrawLine(outlineTransform.worldPosition, { outlineTransform.worldPosition.x, outlineTransform.worldPosition.y + outlineTransform.size.y }, { 1,1,1,1 }, viewProjection);
+			m_LineRenderer.DrawLine({ outlineTransform.worldPosition.x, outlineTransform.worldPosition.y + outlineTransform.size.y }, { outlineTransform.worldPosition.x + outlineTransform.size.x, outlineTransform.worldPosition.y + outlineTransform.size.y }, { 1,1,1,1 }, viewProjection);
 			glLineWidth(1.0f);
 
 		}
@@ -256,8 +264,8 @@ void ViewportPanel::UpdateGizmoState(Scene* scene)
 		auto& transform = scene->m_Registry.GetComponent<Transform>(m_SelectedEntity);
 		m_GizmoCenter =
 		{
-			transform.position.x + transform.size.x * 0.5f,
-			transform.position.y + transform.size.y * 0.5f
+			transform.localPosition.x + transform.size.x * 0.5f,
+			transform.localPosition.y + transform.size.y * 0.5f
 		};
 	}
 
@@ -312,7 +320,7 @@ void ViewportPanel::UpdatePlayCamera(Scene* scene)
 		auto& camTransform = scene->m_Registry.GetComponent<Transform>(scene->GetPrimaryCamera());
 		playCamera.SetViewPortSize(m_Framebuffer.GetWidth(), m_Framebuffer.GetHeight());
 
-		m_ViewportState.CameraPosition = camTransform.position;
+		m_ViewportState.CameraPosition = camTransform.localPosition;
 		m_ViewportState.ViewProjection = playCamera.GetProjection() * playCamera.GetViewMatrix(camTransform);
 		m_ViewportState.VisibleWidth = m_Framebuffer.GetWidth() * playCamera.zoom;
 		m_ViewportState.VisibleHeight = m_Framebuffer.GetHeight() * playCamera.zoom;
@@ -434,10 +442,10 @@ void ViewportPanel::HandlePicking(Scene* scene, Renderer& renderer)
 			auto& transform =
 				scene->m_Registry.GetComponent<Transform>(entity);
 
-			float left = transform.position.x;
-			float right = transform.position.x + transform.size.x;
-			float top = transform.position.y;
-			float bottom = transform.position.y + transform.size.y;
+			float left = transform.localPosition.x;
+			float right = transform.localPosition.x + transform.size.x;
+			float top = transform.localPosition.y;
+			float bottom = transform.localPosition.y + transform.size.y;
 
 			if (worldX >= left && worldX <= right &&
 				worldY >= top && worldY <= bottom)
@@ -456,8 +464,8 @@ void ViewportPanel::HandlePicking(Scene* scene, Renderer& renderer)
 
 				m_DragOffset =
 				{
-					worldX - transform.position.x,
-					worldY - transform.position.y
+					worldX - transform.localPosition.x,
+					worldY - transform.localPosition.y
 				};
 				break;
 			}
@@ -484,29 +492,29 @@ void ViewportPanel::HandlePicking(Scene* scene, Renderer& renderer)
 
 		if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl))
 		{
-			transform.position.x =
+			transform.localPosition.x =
 				round(targetX / m_GridSize)
 				* m_GridSize;
 
-			transform.position.y =
+			transform.localPosition.y =
 				round(targetY / m_GridSize)
 				* m_GridSize;
 		}
 
 		else if (m_ActiveAxis == GizmoAxis::X)
 		{
-			transform.position.x = targetX;
+			transform.localPosition.x = targetX;
 			m_GizmoDragging = true;
 		}
 		else if (m_ActiveAxis == GizmoAxis::Y)
 		{
-			transform.position.y = targetY;
+			transform.localPosition.y = targetY;
 			m_GizmoDragging = true;
 		}
 		else
 		{
-			transform.position.x = targetX;
-			transform.position.y = targetY;
+			transform.localPosition.x = targetX;
+			transform.localPosition.y = targetY;
 			m_GizmoDragging = false;
 
 		}

@@ -9,6 +9,7 @@
 #include "../../AssetManager.h"
 #include "portable-file-dialogs.h"
 #include "../../../../vendor/imgui/imgui.h"
+#include "../../PrefabSerializer.h"
 
 using namespace XTEngine2d;
 

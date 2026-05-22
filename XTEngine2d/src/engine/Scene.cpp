@@ -11,6 +11,7 @@ namespace XTEngine2d
 
 	void Scene::Update(float deltaTime, InputManager& Input)
 	{
+		UpdateHierarchityTransfrom();
 		MovementSystem(*this, deltaTime,Input);
 	}
 
@@ -54,5 +55,82 @@ namespace XTEngine2d
 	void Scene::Clear()
 	{
 		m_Registry.Clear();
+	}
+
+	void Scene::UpdateHierarchityTransfrom()
+	{
+		auto allEntities = m_Registry.GetAllEntities();
+
+		for (auto entity : allEntities)
+		{
+			if (!m_Registry.HasComponent<Transform>(entity))
+				continue;
+
+
+			bool isRoot = true;
+
+			if (m_Registry.HasComponent<Hierarchy>(entity))
+			{
+				auto& hierarchy = m_Registry.GetComponent<Hierarchy>(entity);
+
+				isRoot = hierarchy.parent == 0;
+
+			}
+
+			if (isRoot)
+			{
+				UpdateChildTransform(entity);
+			}
+		}
+
+
+	}
+	void Scene::UpdateChildTransform(Entity entity)
+	{
+
+		if (!m_Registry.HasComponent<Transform>(entity))
+			return;
+
+		auto& transform = m_Registry.GetComponent<Transform>(entity);
+
+
+		if (m_Registry.HasComponent<Hierarchy>(entity))
+		{
+			auto& hierarchy = m_Registry.GetComponent<Hierarchy>(entity);
+
+			if (hierarchy.parent != 0)
+			{
+				auto& parentTransform = m_Registry.GetComponent<Transform>(hierarchy.parent);
+
+				transform.worldPosition = parentTransform.worldPosition + transform.localPosition;
+
+				transform.worldRotation = parentTransform.worldRotation + transform.localRotation;
+
+				transform.worldScale = parentTransform.worldScale + transform.localScale;
+
+				//XT_CORE_INFO("World POS: {},{}",transform.worldPosition.x, transform.worldPosition.y);
+				//XT_CORE_INFO("Local POS: {},{}",transform.localPosition.x,transform.localPosition.y);
+			}
+			else
+			{
+				transform.worldPosition = transform.localPosition;
+				transform.worldRotation = transform.localRotation;
+				transform.worldScale    = transform.localScale;
+
+			}
+
+
+			for (auto child : hierarchy.children)
+			{
+				UpdateChildTransform(child);
+			}
+		}
+		else
+		{
+			transform.worldPosition = transform.localPosition;
+			transform.worldRotation = transform.localRotation;
+			transform.worldScale    = transform.localScale;
+		}
+
 	}
 }

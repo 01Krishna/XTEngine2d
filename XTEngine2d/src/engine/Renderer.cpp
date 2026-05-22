@@ -65,8 +65,8 @@ namespace XTEngine2d
 		model = glm::translate(
 			model,
 			glm::vec3(
-				transform.position.x,
-				transform.position.y,
+				transform.worldPosition.x,
+				transform.worldPosition.y,
 				0.0f));
 
 		// Move pivot to center
@@ -80,7 +80,7 @@ namespace XTEngine2d
 		//// Rotate
 		model = glm::rotate(
 			model,
-			glm::radians(transform.rotation.z),
+			glm::radians(transform.worldRotation),
 			glm::vec3(0.0f, 0.0f, 1.0f));
 
 		// Move pivot back
@@ -97,6 +97,13 @@ namespace XTEngine2d
 			glm::vec3(
 				transform.size.x,
 				transform.size.y,
+				1.0f));
+
+		model = glm::scale(
+			model,
+			glm::vec3(
+				transform.worldScale.x,
+				transform.worldScale.y,
 				1.0f));
 
 		shader.setMat4("model", glm::value_ptr(model));

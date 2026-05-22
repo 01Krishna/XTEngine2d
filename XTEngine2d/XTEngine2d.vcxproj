@@ -149,6 +149,10 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\ICommand.h" />
+    <ClInclude Include="src\engine\Commands\MoveEntityCommand.h" />
+    <ClInclude Include="src\engine\PrefabSerializer.h" />
+    <ClInclude Include="src\engine\Hierarchy.h" />
     <ClInclude Include="src\engine\Editor\Panels\AssetsBrowserPanel.h" />
     <ClInclude Include="src\engine\Editor\EditorCamera.h" />
     <ClInclude Include="src\engine\Editor\Panels\HierarchyPanel.h" />
@@ -194,6 +198,10 @@
     <ClInclude Include="src\engine\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\ICommand.cpp" />
+    <ClCompile Include="src\engine\Commands\MoveEntityCommand.cpp" />
+    <ClCompile Include="src\engine\PrefabSerializer.cpp" />
+    <ClCompile Include="src\engine\Hierarchy.cpp" />
     <ClCompile Include="src\engine\Editor\Panels\AssetsBrowserPanel.cpp" />
     <ClCompile Include="src\engine\Editor\EditorCamera.cpp" />
     <ClCompile Include="src\engine\Editor\Panels\HierarchyPanel.cpp" />

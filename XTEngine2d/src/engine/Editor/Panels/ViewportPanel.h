@@ -11,6 +11,7 @@
 #include "../../../../vendor/imgui/imgui.h"
 #include "../../SceneSerializer.h"
 #include "../../AssetManager.h"
+#include "../../PrefabSerializer.h"
 
 
 using namespace XTEngine2d;

@@ -13,7 +13,7 @@ namespace XTEngine2d
 	{
 		glm::mat4 view = glm::mat4(1.0f);
 
-		return glm::translate(view, glm::vec3(-transform.position, 0.0f));
+		return glm::translate(view, glm::vec3(-transform.localPosition, 0.0f));
 	}
 
 	glm::mat4 Camera::GetProjection() const
