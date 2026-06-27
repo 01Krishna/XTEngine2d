@@ -33,7 +33,7 @@ public:
 
 	std::string GetSelectedAsset()
 	{
-		return selectedAssetFullPath.string();
+		return selectedAsset;
 	}
 
 	void LoadIcons()

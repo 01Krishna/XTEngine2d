@@ -13,17 +13,29 @@ ScenePanel::~ScenePanel()
 void ScenePanel::OnImGuiRender(XTEngine2d::Scene* scene , XTEngine2d::SceneState& sceneState)
 {
 	ImGui::Begin("Scene Controls");
+	static char buffer[256];
+
+	strcpy_s(buffer, scene->m_SceneName.c_str());
+
+	if (ImGui::InputText(
+		"##sceneName",
+		buffer,
+		256))
+	{
+		scene->m_SceneName = buffer;
+	}
+
 	if (ImGui::Button("Save Scene", ImVec2(0, 0)))
 	{
 		XTEngine2d::SceneSerializer serializer;
 
-		serializer.Serialize("Assets\\scenes\\" + sceneName + ".json", sceneName, scene);
+		serializer.Serialize("Assets\\scenes\\" + scene->m_SceneName + ".json", scene->m_SceneName, scene);
 	}
 	if (ImGui::Button("Load Scene", ImVec2(0, 0)))
 	{
 		XTEngine2d::SceneSerializer serializer;
 
-		serializer.Deserialize("Assets\\scenes\\" + sceneName + ".json", sceneName, scene);
+		serializer.Deserialize("Assets\\scenes\\" + scene->m_SceneName + ".json", scene->m_SceneName, scene);
 		scene->CheckPrimaryCameraAvailability();
 		if (!scene->HasPrimaryCamera() || !scene->m_Registry.ValidateEntity(scene->GetPrimaryCamera()))
 			CreateDefaultCamera(scene);

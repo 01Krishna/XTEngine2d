@@ -6,7 +6,9 @@
 #include "PlayerController.h"
 #include "CameraController.h"
 #include "Sprite.h"
-
+#include "Animation.h"
+#include "AnimationStateMachine.h"
+#include "TileMap.h"
 
 using json = nlohmann::json;
 
@@ -35,5 +37,14 @@ namespace ComponentSerializer
 	json SerializeTag(const XTEngine2d::Tag& tag);
 	XTEngine2d::Tag  DeserializeTag(const json& tagJson);
 
+
+	json SerializeAnimation(const XTEngine2d::Animation& animation);
+	XTEngine2d::Animation DeserializeAnimation(const json& animationjson);
+
+	json SerializeTileMap(const XTEngine2d::TileMap& tilemap);
+	XTEngine2d::TileMap DeserializeTileMap(const json& tilemapJson);
+
+	json SerializeAnimationStateMachine(const XTEngine2d::AnimationStateMachine& State);
+	XTEngine2d::AnimationStateMachine DeserializeAnimationStateMachine(const json& StateJson);
 
 }

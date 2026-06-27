@@ -46,7 +46,7 @@ namespace XTEngine2d
 	{
 		Tag(std::string Name):name(Name){}
 		Tag(){}
-		std::string name = "Entity";
+		std::string name = "No Tag";
 	};
 	
 	enum class SceneState

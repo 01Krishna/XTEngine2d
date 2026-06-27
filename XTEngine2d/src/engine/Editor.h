@@ -18,7 +18,11 @@
 #include "Editor/Panels/EntityManagerPanel.h"
 #include "Editor/Panels/HierarchyPanel.h"
 #include "Editor/Panels/AssetsBrowserPanel.h"
+#include "Commands/DuplicateEntityCommad.h"
+#include "CommandHistory.h"
+#include "InputManager.h"
 
+#include <stack>
 
 namespace XTEngine2d
 {
@@ -33,15 +37,7 @@ namespace XTEngine2d
 		~Editor();
 
 		void Init(Window* window);
-		//void FrameBufferInit(int width, int height);
-		void OnImGuiRender(Renderer& renderer, Window* window, float delta, InputManager &input);
-		//void ViewportSetup(Scene* scene, Renderer& renderer, Window* window);
-		//void HandlePicking(Scene* scene, Renderer& renderer);
-		//void HandleZoom(Scene* scene);
-		//float DistanceToLineSegment(glm::vec2 p, glm::vec2 a, glm::vec2 b);
-		//void DrawGrid(Scene* scene, Renderer& renderer, glm::mat4 viewProjection);
-		//void DrawGizmo(Scene* scene, Renderer& renderer, glm::mat4 viewProjection);
-		//void DrawOutline(Scene* scene, Renderer& renderer, glm::mat4 viewProjection);
+		void OnImGuiRender(Renderer& renderer, Window* window, float delta, float accumulatedtime, InputManager &input);
 		void InitDocking();
 		void BeginFrame();
 		void EndFrame();
@@ -49,12 +45,6 @@ namespace XTEngine2d
 		int m_GridSize = 32;
 
 	private:
-		//void DrawHierarchy(std::vector<Entity>& entities, Scene* scene);
-		//void DrawInspector(std::vector<Entity>& entities, Scene* scene);
-		//void DrawSceneControls(std::vector<Entity>& entities, Scene* scene);
-		//void DrawEntityManager(std::vector<Entity>& entities, Scene* scene);
-
-		//void RenderViewport(Scene* scene, Renderer& renderer, Window* window);
 
 		void CreateDefaultCamera(Scene* scene);
 
@@ -67,10 +57,18 @@ namespace XTEngine2d
 		HierarchyPanel m_HierarchyPanel;
 		AssetsBrowserPanel m_AssetsBrowserPanel;
 
+
+		CommandHistory m_CommandHistory;
+		std::stack<std::string> undoCommandRetrival;
+		std::stack<std::string> redoCommandRetrival;
+
 		SceneState m_SceneState = SceneState::Edit;
 
 		std::shared_ptr<Scene> m_EditorScene;
 		std::shared_ptr<Scene> m_RuntimeScene;
+
+		bool undo = false;
+		bool redo = false;
 
 	public:
 		std::shared_ptr<Scene> GetActiveScene()

@@ -12,8 +12,8 @@ namespace XTEngine2d
         int m_SpriteWidth;
         int m_SpriteHeight;
     public:
-        int m_Columns = 0;
-        int m_Rows = 0;
+        int m_Columns;
+        int m_Rows;
 
 		int m_SelectedColumn = 0;
 		int m_SelectedRow = 0;
@@ -27,6 +27,8 @@ namespace XTEngine2d
         {
             m_Columns = texture->GetWidth() / spriteWidth;
             m_Rows = texture->GetHeight() / spriteHeight;
+
+
         }
 
         void SetTexture(Texture* texture, int spriteWidth, int spriteHeight)
@@ -43,15 +45,17 @@ namespace XTEngine2d
         {
             m_SpriteWidth = spriteWidth;
             m_SpriteHeight = spriteHeight;
-            m_Columns = m_Texture->GetWidth() / spriteWidth;
-            m_Rows = m_Texture->GetHeight() / spriteHeight;
+
+            if (spriteWidth && spriteHeight != 0)
+            {
+                m_Columns = m_Texture->GetWidth() / spriteWidth;
+                m_Rows = m_Texture->GetHeight() / spriteHeight;
+            }
         }
 
         glm::vec4 GetUV(int column, int row)
         {
-			m_SelectedColumn = column;
-			m_SelectedRow = row;
-
+                    
             float texWidth = (float)m_Texture->GetWidth();
             float texHeight = (float)m_Texture->GetHeight();
 
@@ -65,6 +69,19 @@ namespace XTEngine2d
 
             return { u1, v1, u2, v2 };
         }
+
+        glm::vec4 GetUVFromFrame(int frame)
+        {
+            int column = frame % m_Columns;
+            int row = frame / m_Columns;
+
+            return GetUV(column, row);
+        }
+
+        glm::vec4 GetUVFromRowColumn(int column, int row)
+        {
+            return GetUV(column, row);
+		}
 
         glm::vec2 GetSelectedRowColumn()
         {

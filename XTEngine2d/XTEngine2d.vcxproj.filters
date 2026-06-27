@@ -146,6 +146,20 @@
     <ClInclude Include="src\engine\PrefabSerializer.h" />
     <ClInclude Include="src\engine\ICommand.h" />
     <ClInclude Include="src\engine\Commands\MoveEntityCommand.h" />
+    <ClInclude Include="src\engine\CommandHistory.h" />
+    <ClInclude Include="src\engine\Commands\CreateEntityCommand.h" />
+    <ClInclude Include="src\engine\Commands\DeleteEntityCommand.h" />
+    <ClInclude Include="src\engine\Commands\AddComponentCommand.h" />
+    <ClInclude Include="src\engine\Commands\RemoveComponentCommand.h" />
+    <ClInclude Include="src\engine\Commands\ReparentEntityCommand.h" />
+    <ClInclude Include="src\engine\Editor\Panels\PanelsHelper.h" />
+    <ClInclude Include="src\engine\Commands\DuplicateEntityCommad.h" />
+    <ClInclude Include="src\engine\EntitySnapshot.h" />
+    <ClInclude Include="src\engine\Commands\CreateSpriteEntityCommand.h" />
+    <ClInclude Include="src\engine\Systems\AnimationSystem.h" />
+    <ClInclude Include="src\engine\TileMap.h" />
+    <ClInclude Include="src\engine\BatchRenderer.h" />
+    <ClInclude Include="src\engine\Commands\TilePaintCommand.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\Application.cpp">
@@ -246,5 +260,13 @@
     <ClCompile Include="src\engine\PrefabSerializer.cpp" />
     <ClCompile Include="src\engine\ICommand.cpp" />
     <ClCompile Include="src\engine\Commands\MoveEntityCommand.cpp" />
+    <ClCompile Include="src\engine\CommandHistory.cpp" />
+    <ClCompile Include="src\engine\Commands\CreateEntityCommand.cpp" />
+    <ClCompile Include="src\engine\Commands\DeleteEntityCommand.cpp" />
+    <ClCompile Include="src\engine\EntitySnapshot.cpp" />
+    <ClCompile Include="src\engine\Commands\CreateSpriteEntityCommand.cpp" />
+    <ClCompile Include="src\engine\Systems\AnimationSystem.cpp" />
+    <ClCompile Include="src\engine\BatchRenderer.cpp" />
+    <ClCompile Include="src\engine\Commands\TilePaintCommand.cpp" />
   </ItemGroup>
 </Project>

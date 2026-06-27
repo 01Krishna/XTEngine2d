@@ -11,9 +11,8 @@ namespace XTEngine2d
 		static void Init(GLFWwindow* window);
 	
 		static void Update();
-
 		static bool IsKeyPressed(int key);
-
+		bool IsKeyJustPressed(int key);
 		static bool IsMousePressed(int button);
 
 		static double GetMouseX();
@@ -22,7 +21,7 @@ namespace XTEngine2d
 
 	private:
 		static GLFWwindow* s_Window;
-
+	public:
 		static KeyboardInputHandle s_Keyboard;
 		static MouseInputHandle s_Mouse;
 	};

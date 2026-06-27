@@ -1,86 +1,23 @@
 #pragma once
 
-#include <unordered_map>
-#include <string>
-
-
-enum AnimationState
+namespace XTEngine2d
 {
-	Idle = 0,
-	Run,
-	Walk,
-	Jump, 
-	Interacting
-};
-
-
-struct AnimationData
-{
-	int startFrame;
-	int frameCount;
-	float frameTime;
-	bool loop;
-};
-
-
-class Animator
-{
-public:
-	std::unordered_map<std::string, AnimationData> Animations;
-	std::string currentAnimation;
-	float timer;
-	int currentFrame;
-
-	SpriteRenderer* renderer = nullptr;
-
-	void AddAnimation(std::string& name, AnimationData& data)
+	class Animation
 	{
-		Animations[name] = data;
-	}
+	public:
+		float m_Fps = 0;
+		bool m_RowOrColumnAnchor = true; // true = row, false = column
+		int m_StartFrame = 0;
+		int m_EndFrame = 0;
 
+		int m_StartingRow = 0;
+		int m_StartingColumn = 0;
 
-	void PlayAnimation(std::string& name)
-	{
-		if (currentAnimation == name) return;
-		
-		currentAnimation = name;	
-		timer = 0.0f;
-		currentFrame = 0;
-	}
+		int m_CurrentFrame = 0;
 
+		float m_Timer = 0.f;
 
-	void Update(float dt)
-	{
-		if (currentAnimation.empty()) return;
-
-		timer += dt;
-
-		AnimationData& data = Animations[currentAnimation];
-
-		if (timer >= data.frameTime)
-		{
-			timer = 0.0f;
-			currentFrame++;
-
-			if (currentFrame >= data.frameCount)
-			{
-				if (data.loop)
-				{
-					currentFrame = 0;
-				}
-				else
-					currentFrame = data.frameCount - 1;
-			}
-
-			renderer->SetFrame(anim.startFrame + currentFrame);
-		}
-
-	}
-
-
-	void SetRenderer(SpriteRenderer* r)
-	{
-		renderer = r;
-	}
-
-};
+		bool m_Looping = false;
+		bool m_Playing = false;
+	};
+}

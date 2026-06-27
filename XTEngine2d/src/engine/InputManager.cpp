@@ -13,25 +13,21 @@ namespace XTEngine2d
 	
 	void InputManager::Update()
 	{
-		s_Keyboard.UpdateInput(s_Window);
+		s_Keyboard.Update(s_Window);
 		s_Mouse.UpdateInput(s_Window);
 	}
 
 	bool InputManager::IsKeyPressed(int key)
 	{
-		switch (key)
-		{
-			case GLFW_KEY_W: return s_Keyboard.m_InputKeys.Key_W; break;
-			case GLFW_KEY_A: return s_Keyboard.m_InputKeys.Key_A; break;
-			case GLFW_KEY_S: return s_Keyboard.m_InputKeys.Key_S; break;
-			case GLFW_KEY_D: return s_Keyboard.m_InputKeys.Key_D; break;
-			case GLFW_KEY_LEFT: return s_Keyboard.m_InputKeys.Key_Left; break;
-			case GLFW_KEY_RIGHT: return s_Keyboard.m_InputKeys.Key_Right; break;
-			case GLFW_KEY_UP: return s_Keyboard.m_InputKeys.Key_Up; break;
-			case GLFW_KEY_DOWN: return s_Keyboard.m_InputKeys.Key_Down; break;
-			default: return false;
-		}
+		return s_Keyboard.m_Keys[key];
 	}
+
+	// New: True ONLY on the exact frame it was pushed down
+	bool InputManager::IsKeyJustPressed(int key)
+	{
+		return s_Keyboard.m_Keys[key] && !s_Keyboard.m_PreviousKeys[key];
+	}
+
 
 	bool InputManager::IsMousePressed(int button)
 	{

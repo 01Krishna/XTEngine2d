@@ -12,6 +12,13 @@
 #include "../../SceneSerializer.h"
 #include "../../AssetManager.h"
 #include "../../PrefabSerializer.h"
+#include "../../CommandHistory.h"
+#include "../../Commands/MoveEntityCommand.h"
+#include "../../Commands/CreateSpriteEntityCommand.h"
+#include "../../TileMap.h"
+#include "../../Commands/TilePaintCommand.h"
+#include "../../BatchRenderer.h"
+
 
 
 using namespace XTEngine2d;
@@ -22,6 +29,8 @@ struct ViewportState
 	glm::mat4 ViewProjection;
 
 	glm::vec2 CameraPosition;
+	glm::vec2 CameraSize;
+	float CameraZoom;
 
 	float VisibleWidth;
 	float VisibleHeight;
@@ -42,6 +51,13 @@ enum class GizmoAxis
 	Y
 };
 
+enum class GizmoOperation
+{
+	Translate,
+	Rotate,
+	Scale
+};
+
 
 
 class ViewportPanel
@@ -50,8 +66,8 @@ public:
 	ViewportPanel();
 	~ViewportPanel();
 public:
-	void Init(Window* window);
-	void OnImGuiRender(std::shared_ptr<Scene> EditorScene, std::shared_ptr<Scene> RuntimeScene, Renderer& renderer, Window* window, Entity& SelectedEntity, SceneState& sceneState, float delta);
+	void Init(Window* window, CommandHistory* cmdHistory);
+	void OnImGuiRender(std::shared_ptr<Scene> EditorScene, std::shared_ptr<Scene> RuntimeScene, Renderer& renderer, Window* window, Entity& SelectedEntity, SceneState& sceneState, float delta, float accumulated,  int selectedTile);
 	Entity GetSelectedEntity();
 private:
 	ViewportState m_ViewportState;
@@ -66,15 +82,34 @@ private:
 	float m_GizmoSize = 10.0f;
 	glm::vec2 m_GizmoCenter = { 0,0 };
 	glm::vec2 m_DragOffset = { 0,0 };
+	GizmoOperation m_CurrentOperation;
+
+	glm::vec2 oldPosition = { 0.0f,0.0f };
+	glm::vec2 newPosition = { 0.0f,0.0f };
+
+	bool isMoved = false;
+	bool isPaintedTileModified = false;
+
+	bool insideSelectedEntity = false;
+
+
+	CommandHistory* CMDHISTORY;
 
 	EditorCamera m_EditorCamera;
 
 	SceneSerializer serializer;
 	bool runtimeSceneInitialized = false;
+	
+	BatchRenderer m_BatchRenderer;
 
 	Entity m_ActiveCamera = 0;
 
+	std::unordered_map<int, int> m_ModifiedTiles;
+	std::unordered_map<int, int> m_OriginalTiles;
 
+
+	float m_DeltaTime = 0.0f;
+	float m_AccumulatedTime = 0.0f; 
 
 private:
 	void UpdateViewport(Scene* scene, Renderer& renderer, Window* window);
@@ -86,6 +121,10 @@ private:
 	void DrawGizmo(Scene* scene, Renderer& renderer, glm::mat4 viewProjection);
 	void DrawOutline(Scene* scene, Renderer& renderer, glm::mat4 viewProjection);
 	void UpdateGizmoState(Scene* scene);
+
+	void DrawTileMap(Scene* scene,Renderer& renderer, Entity camera);
+	void DrawTileMap(Scene* scene,Renderer& renderer,EditorCamera camera);
+	void UpdateTileMap(Scene* scene,int selectedTile);
 
 
 	void CreateSpriteEntity(Scene* scene, std::string path);

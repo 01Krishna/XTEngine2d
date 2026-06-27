@@ -12,7 +12,7 @@ uniform mat4 model;
 
 void main()
 {
-    gl_Position = viewProjection * model * vec4(aPos, 1.0);
+    gl_Position = viewProjection * model* vec4(aPos, 1.0);
     ourColor = aColor;
     TexCoords = aTexCoords;
 }

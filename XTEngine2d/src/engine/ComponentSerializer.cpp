@@ -68,6 +68,9 @@ json ComponentSerializer::SerializeSpriteSheet(const XTEngine2d::SpriteSheet& sh
 	entityJson["SpriteWidth"] = sheet.m_SpriteWidth;
 	entityJson["SpriteHeight"] = sheet.m_SpriteHeight;
 
+	entityJson["SpriteRow"] = sheet.m_SelectedRow;
+	entityJson["SpriteColumn"] = sheet.m_SelectedColumn;
+
 	return entityJson;
 }
 
@@ -77,6 +80,8 @@ XTEngine2d::SpriteSheet ComponentSerializer::DeserializeSpriteSheet(const json& 
 
 	 sheet.m_SpriteWidth = sheetJson["SpriteWidth"];
 	 sheet.m_SpriteHeight = sheetJson["SpriteHeight"];
+	 sheet.m_SelectedRow = sheetJson["SpriteRow"];
+	 sheet.m_SelectedColumn = sheetJson["SpriteColumn"];
 
 	return sheet;
 }
@@ -158,4 +163,94 @@ XTEngine2d::Tag ComponentSerializer::DeserializeTag(const json& tagJson)
 	XTEngine2d::Tag tag;
 	tag.name = tagJson.get<std::string>();
 	return tag;
+}
+
+json ComponentSerializer::SerializeAnimation(const XTEngine2d::Animation& animation)
+{	
+	json entityJson;
+
+	entityJson["StartFrame"] = animation.m_StartFrame;
+	entityJson["EndFrame"] = animation.m_EndFrame;
+	entityJson["Fps"] = animation.m_Fps;
+	entityJson["Looping"] = animation.m_Looping;
+	entityJson["Playing"] = animation.m_Playing;
+
+	return entityJson;
+}
+
+XTEngine2d::Animation ComponentSerializer::DeserializeAnimation(const json& animationJson)
+{
+	XTEngine2d::Animation animation;
+
+	animation.m_StartFrame = animationJson["StartFrame"];
+	animation.m_EndFrame = animationJson["EndFrame"];
+	animation.m_Fps = animationJson["Fps"];
+	animation.m_Looping = animationJson["Looping"];
+	animation.m_Playing = animationJson["Playing"];
+
+	return animation;
+}
+
+json ComponentSerializer::SerializeTileMap(const XTEngine2d::TileMap& tilemap)
+{
+	json entityJson;
+	entityJson["Height"] = tilemap.height;
+	entityJson["Width"] = tilemap.width;
+	entityJson["GridSize"] = tilemap.gridSize;
+
+	for (int i = 0; i < tilemap.tiles.size(); i++)
+	{
+		entityJson["Tiles"][i] = tilemap.tiles[i];
+	}
+	entityJson["Texture"] = tilemap.texture ? tilemap.texture->GetPath() : "";
+
+	return entityJson;
+}
+
+XTEngine2d::TileMap ComponentSerializer::DeserializeTileMap(const json& tilemapJson)
+{
+	XTEngine2d::TileMap tilemap;
+
+	tilemap.height = tilemapJson["Height"];
+	tilemap.width = tilemapJson["Width"];
+	tilemap.gridSize = tilemapJson["GridSize"];
+
+	tilemap.tiles.resize(tilemapJson["Tiles"].size());
+
+	for (int i = 0; i < tilemapJson["Tiles"].size(); i++)
+	{
+		tilemap.tiles[i] = tilemapJson["Tiles"][i];
+	}
+	std::string texturePath = tilemapJson.value("Texture", std::string());
+	tilemap.texture = XTEngine2d::AssetManager::LoadTexture(texturePath);
+	return tilemap;
+}
+
+json ComponentSerializer::SerializeAnimationStateMachine(const XTEngine2d::AnimationStateMachine& State)
+{
+	json entityJson;
+	
+	entityJson["Name"] = State.m_States.begin()->first;
+
+	entityJson["Looping"] = State.m_States.begin()->second.looping;
+	entityJson["Value"] = State.m_States.begin()->second.value;
+	entityJson["Frame"] = State.m_States.begin()->second.startingFrame;
+
+	return entityJson;
+}
+
+XTEngine2d::AnimationStateMachine ComponentSerializer::DeserializeAnimationStateMachine(const json& stateJson)
+{
+	XTEngine2d::AnimationStateMachine StateMachine;
+
+	XTEngine2d::AnimationState temp;
+
+
+	temp.looping = stateJson["Looping"];
+	temp.value = stateJson["Value"];
+	temp.startingFrame = stateJson["Frame"];
+
+	StateMachine.m_States[stateJson["Name"]] = temp;
+	
+	return StateMachine;
 }

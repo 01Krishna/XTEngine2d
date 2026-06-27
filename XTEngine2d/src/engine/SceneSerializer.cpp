@@ -3,6 +3,9 @@
 #include "AssetManager.h"
 #include "ComponentSerializer.h"
 #include "Camera.h"
+#include "Animation.h"
+#include "AnimationStateMachine.h"
+
 
 using json = nlohmann::json;
 
@@ -63,6 +66,26 @@ namespace XTEngine2d
 				entityJson["Tag"] = ComponentSerializer::SerializeTag(tag);
 			}
 
+			if (scene->m_Registry.HasComponent<XTEngine2d::Animation>(entity))
+			{
+				Animation anim = scene->m_Registry.GetComponent<Animation>(entity);
+				entityJson["Animation"] = ComponentSerializer::SerializeAnimation(anim);
+
+			}
+			
+			if (scene->m_Registry.HasComponent<XTEngine2d::AnimationStateMachine>(entity))
+			{
+				AnimationStateMachine stateMachine = scene->m_Registry.GetComponent<AnimationStateMachine>(entity);
+				entityJson["AnimationStateMachine"] = ComponentSerializer::SerializeAnimationStateMachine(stateMachine);
+			}
+
+			if (scene->m_Registry.HasComponent<XTEngine2d::TileMap>(entity))
+			{
+				TileMap tilemap = scene->m_Registry.GetComponent<TileMap>(entity);
+				entityJson["TileMap"] = ComponentSerializer::SerializeTileMap(tilemap);
+			}
+
+
 			data["Entities"].push_back(entityJson);
 		}
 
@@ -77,6 +100,8 @@ namespace XTEngine2d
 			std::ifstream f(filePath);
 			f >> data;
 		}
+		
+		scene->m_SceneName = data["Scene"];
 
 		for (auto& entityJson : data["Entities"])
 		{
@@ -123,6 +148,23 @@ namespace XTEngine2d
 			{
 				Tag tag = ComponentSerializer::DeserializeTag(entityJson["Tag"]);
 				scene->m_Registry.AddComponent(ent, tag);
+			}
+			
+			if (entityJson.contains("Animation"))
+			{
+				Animation animation = ComponentSerializer::DeserializeAnimation(entityJson["Animation"]);
+				scene->m_Registry.AddComponent(ent, animation);
+			}
+			if (entityJson.contains("AnimationStateMachine"))
+			{
+				AnimationStateMachine stateMachine = ComponentSerializer::DeserializeAnimationStateMachine(entityJson["AnimationStateMachine"]);
+				scene->m_Registry.AddComponent(ent, stateMachine);
+			}
+
+			if (entityJson.contains("TileMap"))
+			{
+				TileMap tilemap = ComponentSerializer::DeserializeTileMap(entityJson["TileMap"]);
+				scene->m_Registry.AddComponent(ent, tilemap);
 			}
 		}
 	}

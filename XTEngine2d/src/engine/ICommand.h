@@ -1,10 +1,18 @@
 #pragma once
+#include "Utility.h"
 
-class ICommand
-{
-public:
-    virtual ~ICommand() = default;
+namespace XTEngine2d {
 
-    virtual void Execute() = 0;
-    virtual void Undo() = 0;
-};
+    class Scene;
+
+    class ICommand
+    {
+    public:
+        virtual ~ICommand() = default;
+
+        virtual void Execute() = 0;
+        virtual void Undo() = 0;
+
+        std::string CommandName = "None";
+    };
+}

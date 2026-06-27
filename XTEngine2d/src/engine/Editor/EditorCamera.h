@@ -12,6 +12,7 @@ namespace XTEngine2d
 	public:
 		float zoom = 1.0f;
 		glm::vec2 position = { 0,0 };
+		glm::vec2 size = { 800,600 };
 
 	public:
 		EditorCamera();

@@ -168,6 +168,8 @@ namespace XTEngine2d
 			return std::vector<Entity>(unique.begin(), unique.end());
 		}
 
+
+
 		bool ValidateEntity(Entity entity)
 		{
 			for (auto& [type, storage] : m_Storages)

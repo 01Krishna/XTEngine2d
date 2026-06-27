@@ -23,6 +23,8 @@ namespace XTEngine2d
 		char buffer[256];
 		XTEngine2d::Editor m_Editor; 
 
+	public:
+		float m_AccumulatedTime = 0.0f;
 
 	public:
 		Application();

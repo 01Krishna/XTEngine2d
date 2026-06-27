@@ -91,11 +91,11 @@ void AssetsBrowserPanel::OnImGuiRender()
 		{
 			if (entry.is_directory())
 			{
-				assetPath /= entry.path().filename();
+				assetPath /= entry.path().filename();	
 			}
 			else
 			{
-				selectedAsset = entry.path().filename().string();
+				selectedAsset = entry.path().string();
 			}
 		}
 

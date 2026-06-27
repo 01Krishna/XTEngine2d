@@ -149,6 +149,18 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\BatchRenderer.h" />
+    <ClInclude Include="src\engine\Systems\AnimationSystem.h" />
+    <ClInclude Include="src\engine\Commands\CreateSpriteEntityCommand.h" />
+    <ClInclude Include="src\engine\EntitySnapshot.h" />
+    <ClInclude Include="src\engine\Commands\AddComponentCommand.h" />
+    <ClInclude Include="src\engine\Commands\DeleteEntityCommand.h" />
+    <ClInclude Include="src\engine\Commands\CreateEntityCommand.h" />
+    <ClInclude Include="src\engine\CommandHistory.h" />
+    <ClInclude Include="src\engine\Commands\DuplicateEntityCommad.h" />
+    <ClInclude Include="src\engine\Commands\RemoveComponentCommand.h" />
+    <ClInclude Include="src\engine\Commands\ReparentEntityCommand.h" />
+    <ClInclude Include="src\engine\Editor\Panels\PanelsHelper.h" />
     <ClInclude Include="src\engine\ICommand.h" />
     <ClInclude Include="src\engine\Commands\MoveEntityCommand.h" />
     <ClInclude Include="src\engine\PrefabSerializer.h" />
@@ -160,6 +172,7 @@
     <ClInclude Include="src\engine\Editor\Panels\ScenePanel.h" />
     <ClInclude Include="src\engine\Editor\Panels\InspectorPanel.h" />
     <ClInclude Include="src\engine\Editor\Panels\ViewportPanel.h" />
+    <ClInclude Include="src\engine\TileMap.h" />
     <ClInclude Include="src\XTEngine2d.h" />
     <ClInclude Include="src\engine\Animation.h" />
     <ClInclude Include="src\engine\AnimationStateMachine.h" />
@@ -196,8 +209,16 @@
     <ClInclude Include="src\engine\VertexBufferObject.h" />
     <ClInclude Include="src\engine\Window.h" />
     <ClInclude Include="src\engine\stb_image.h" />
+    <ClInclude Include="src\engine\Commands\TilePaintCommand.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\BatchRenderer.cpp" />
+    <ClCompile Include="src\engine\Systems\AnimationSystem.cpp" />
+    <ClCompile Include="src\engine\Commands\CreateSpriteEntityCommand.cpp" />
+    <ClCompile Include="src\engine\EntitySnapshot.cpp" />
+    <ClCompile Include="src\engine\Commands\DeleteEntityCommand.cpp" />
+    <ClCompile Include="src\engine\Commands\CreateEntityCommand.cpp" />
+    <ClCompile Include="src\engine\CommandHistory.cpp" />
     <ClCompile Include="src\engine\ICommand.cpp" />
     <ClCompile Include="src\engine\Commands\MoveEntityCommand.cpp" />
     <ClCompile Include="src\engine\PrefabSerializer.cpp" />
@@ -230,6 +251,7 @@
     <ClCompile Include="src\engine\imgui_impl_glfw.cpp" />
     <ClCompile Include="src\engine\imgui_impl_opengl3.cpp" />
     <ClCompile Include="src\engine\stb_image.cpp" />
+    <ClCompile Include="src\engine\Commands\TilePaintCommand.cpp" />
     <ClCompile Include="vendor\glad\src\glad.c" />
     <ClCompile Include="vendor\imgui\backends\imgui_impl_glfw.cpp">
       <ObjectFileName>$(IntDir)\imgui_impl_glfw1.obj</ObjectFileName>

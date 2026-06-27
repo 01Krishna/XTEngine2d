@@ -40,9 +40,6 @@ namespace XTEngine2d
 	}
 	void GLFWWindow::OnUpdate()
 	{
-		if (Keyboard_Input.m_WindowKeys.Key_Close)
-			glfwSetWindowShouldClose(m_Window, Keyboard_Input.m_WindowKeys.Key_Close);
-
 		Clear();
 		
 		glfwPollEvents();

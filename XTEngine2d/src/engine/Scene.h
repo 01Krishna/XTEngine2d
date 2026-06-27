@@ -4,6 +4,7 @@
 #include "Utility.h"
 #include "Systems/MovementSystem.h"
 #include "Systems//RenderSystem.h"
+#include "Systems/AnimationSystem.h"
 #include "Camera.h"
 #include "Hierarchy.h"
 
@@ -17,6 +18,7 @@ namespace XTEngine2d
 	public:
 		Registry m_Registry;
 		Shader m_Shader;
+		std::string m_SceneName = "New Scene";
 		Entity m_PrimaryCamera = 0;
 
 

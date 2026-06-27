@@ -5,21 +5,32 @@ void EntityManagerPanel::OnImGuiRender(XTEngine2d::Scene* scene, Entity& m_Selec
 	ImGui::Begin("Entity Manager");
 	if (ImGui::Button("Delete Entity"))
 	{
-		scene->m_Registry.DestroyEntity(m_SelectedEntity);
+		auto cmd = std::make_shared<XTEngine2d::DeleteEntityCommand>(scene, m_SelectedEntity);
+
+		CMDHISTORY->ExecuteCommand(cmd);
+		
 		scene->CheckPrimaryCameraAvailability();
+
 		m_SelectedEntity = 0;
 	}
 
-	if (ImGui::Button("Create Entity"))
+	if(ImGui::Button("Create Entity"))
 	{
 		m_SelectedEntity = 0;
-		Entity entity = scene->m_Registry.CreateEntity();
+		Entity entity = 0;
+
+		auto cmd = std::make_shared<XTEngine2d::CreateEntityCommand>(scene);
+
+		CMDHISTORY->ExecuteCommand(cmd);
+		entity = cmd->GetCreatedEntity();
+
 		XTEngine2d::Tag tag;
 		tag.name = "Entity";
 
 		if (!scene->m_Registry.HasComponent<XTEngine2d::Tag>(entity))
 			scene->m_Registry.AddComponent<XTEngine2d::Tag>(entity, tag);
 		m_SelectedEntity = entity;
+
 	}
 	ImGui::End();
 }
@@ -30,4 +41,9 @@ EntityManagerPanel::EntityManagerPanel()
 
 EntityManagerPanel::~EntityManagerPanel()
 {
+}
+
+void EntityManagerPanel::Init(XTEngine2d::CommandHistory* cmdHistory)
+{
+	CMDHISTORY = cmdHistory;
 }

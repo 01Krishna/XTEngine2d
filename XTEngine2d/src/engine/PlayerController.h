@@ -8,9 +8,5 @@ namespace XTEngine2d
 	public:
 		XTEngine2d::Velocity vel;
 		bool player = false;
-	public:
-		void Update(XTEngine2d::Transform& transform, Input_Keys Key)
-		{
-		}
 	};
 }

@@ -54,26 +54,13 @@ namespace XTEngine2d
 			m_DeltaTime = currentTime - m_LastTime;
 			m_LastTime = currentTime;
 
+			m_AccumulatedTime += m_DeltaTime;
+
 			m_Window->OnUpdate();
 			m_Input.Update();
 			m_Editor.BeginFrame();
-
-			//m_Editor.ViewportSetup(m_Scene.get(), m_Renderer, m_Window);
-			m_Editor.OnImGuiRender(m_Renderer, m_Window, m_DeltaTime, m_Input);
-			//if (!cameras.empty())
-			//{
-			//	auto cameraEntity = cameras[0];
-
-			//	auto& camera =
-			//		m_Scene->m_Registry.GetComponent<XTEngine2d::Camera>(cameraEntity);
-
-			//	camera.SetViewPortSize((float)m_Window->GetWidth(), (float)m_Window->GetHeight());
-			//}
-
-
+			m_Editor.OnImGuiRender(m_Renderer, m_Window, m_DeltaTime, m_AccumulatedTime, m_Input);
 			DrawImGui();
-		
- 			//m_Editor.HandlePicking(m_Scene.get(), m_Renderer);
 			m_Editor.EndFrame();
 			m_Window->OnRender();
 

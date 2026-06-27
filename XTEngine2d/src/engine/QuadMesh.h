@@ -19,7 +19,7 @@ class QuadMesh
 {
 public:
 	static unsigned int VAO;
-	static unsigned int VBO;
+	static unsigned int VBO;	
 	static unsigned int IBO;
 
 	static void Init();

@@ -109,4 +109,72 @@ namespace XTEngine2d
 		shader.setMat4("model", glm::value_ptr(model));
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	}
+	void Renderer::DrawQuad(Shader& shader, Texture* texture, glm::vec2 pos, glm::vec4 uv, glm::vec2 size)
+	{
+
+		glBindVertexArray(QuadMesh::VAO);
+
+		unsigned int finaltexture = texture->GetId() ? texture->GetId() : m_WhiteTexture;
+
+		shader.use();
+			
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, finaltexture);
+
+
+		shader.setInt("ourTexture", 0);	
+		shader.setVec4("uv_Rect", glm::value_ptr(uv));
+		shader.setMat4("viewProjection", glm::value_ptr(m_ViewProjection));
+
+		glm::mat4 model = glm::mat4(1.0f);
+
+
+		// Move to world position
+		model = glm::translate(
+			model,
+			glm::vec3(
+				pos.x,
+				pos.y,
+				0.0f));
+
+		//// Move pivot to center
+		//model = glm::translate(
+		//	model,
+		//	glm::vec3(
+		//		transform.size.x * 0.5f,
+		//		transform.size.y * 0.5f,
+		//		0.0f));
+
+		////// Rotate
+		//model = glm::rotate(
+		//	model,
+		//	glm::radians(transform.worldRotation),
+		//	glm::vec3(0.0f, 0.0f, 1.0f));
+
+		//// Move pivot back
+		//model = glm::translate(
+		//	model,
+		//	glm::vec3(
+		//		-transform.size.x * 0.5f,
+		//		-transform.size.y * 0.5f,
+		//		0.0f));
+
+		//// Scale LAST
+		model = glm::scale(
+			model,
+			glm::vec3(
+				size.x,
+				size.y,
+				1.0f));
+
+		//model = glm::scale(
+		//	model,
+		//	glm::vec3(
+		//		transform.worldScale.x,
+		//		transform.worldScale.y,
+		//		1.0f));
+
+		shader.setMat4("model", glm::value_ptr(model));
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	}
 };
